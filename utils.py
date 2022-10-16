@@ -1,9 +1,11 @@
 from time import sleep
-from os import mkdir, replace, listdir
+from os import mkdir, remove, listdir, replace
 from imghdr import what
+import np
 
 import requests
 from bs4 import BeautifulSoup
+from cv2 import imread, Mat
 
 LINK_YANDEX="https://yandex.ru/images/search?text="
 LINK_PART_2="&p="
@@ -39,7 +41,7 @@ def save_image(response, animal, n):
         
 
 def push_image(animal):
-    for i in range(0, 37):
+    for i in range(0, 40):
         n = 30 * i
         sleep(30)
         response = save_html(LINK_YANDEX + animal + LINK_PART_2 + str(i))
@@ -50,11 +52,7 @@ def remove_stranger(animal, stranger):
     mkdir(f"dataset\stranger_{animal}")
 
     for image in stranger:
-        sourse = f"dataset\{animal}\{image}"
-        destination = f"dataset\stranger_{animal}\{image}"
-        replace(sourse, destination)
-        #Instead of the lines above should be this
-        #remove(f"dataset\dog\{image}")
+        remove(f"dataset\dog\{image}")
 
 
 def cheking_format(animal):
@@ -65,9 +63,44 @@ def cheking_format(animal):
     for image in images:
         path = f"dataset\{animal}\{image}"
         if(what(path) != "jpeg"):
-            replace(path, non_jpg_dir + "/" + image)
-            #Instead of the lines above should be this
-            #remove(path)      
+            remove(path)      
+
+
+def same_images(animal):
+    path_1 = f"dataset/same_images_{animal}"
+    mkdir(path_1)
+
+    path_2 = f"dataset/{animal}"
+    names = listdir(path_2)
+    i, j = 0, 0
+    length_names = len(names)
+
+    while i < length_names - 1:
+        j = i
+        img_1 = imread(f'{path_2}/{names[i]}')
+        while j < length_names - 1:
+            img_2 = imread(f'{path_2}/{names[j+1]}')
+            if np.all(cmp(img_1, img_2)) == True:
+                print("Dublicate: ", names[i], " and ", names[j+1])
+                remove(f'{path_2}/{names[j+1]}')
+            j += 1
+        print(names[i])
+        names = listdir(path_2)
+        length_names = len(names)
+        i += 1
+
+
+def cmp(image_1: Mat, image_2: Mat) -> bool:
+  return image_1 == image_2
+
+
+def rename_image(animal):
+    path = f"dataset/{animal}"
+    i = 0
+    names = listdir(path)
+    for image in names:
+        replace(f"{path}/{image}", f"{path}/{str(i).zfill(4)}.jpg")
+        i += 1
 
 
 def main():
@@ -89,15 +122,23 @@ def main():
                     "0709.jpg", "0726.jpg", "0737.jpg", "0786.jpg", "0816.jpg",
                     "0828.jpg", "0843.jpg", "0855.jpg", "0881.jpg", "0942.jpg",
                     "1022.jpg", "1029.jpg", "1065.jpg", "1072.jpg", "1082.jpg",
-                    "1089.jpg", "1096.jpg"]
+                    "1089.jpg", "1096.jpg", "1179.jpg", "1111.jpg"]
     remove_stranger(DOG, stranger_dog)
 
     #Deleting "foreign" images in the "cat" folder
-    stranger_cat = ["0410.jpg", "0772.jpg", "0782.jpg", "0911.jpg", "0977.jpg"]
+    stranger_cat = ["0410.jpg", "0772.jpg", "0782.jpg", "0911.jpg", "0977.jpg",
+                    "1030.jpg", "1039.jpg"]
     remove_stranger(CAT, stranger_cat)
 
     #Checking for .jpg format
     cheking_format(CAT)
     cheking_format(DOG)
     #all images are in jpg format
-    
+
+    #Delete dublicate
+    same_images(CAT)
+    same_images(DOG)
+
+    #Changing the name of images
+    rename_image(CAT)
+    rename_image(DOG)
