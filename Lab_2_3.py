@@ -1,7 +1,8 @@
 import os
 from random import sample
-from Lab_2_2 import create_dir, copy_dataset
 from pathlib import Path
+
+from Lab_2_2 import create_dir, copy_dataset
 
 
 def randNames_create_csv(ndp: str) -> None:
@@ -22,9 +23,7 @@ def randNames_create_csv(ndp: str) -> None:
                 line = abspath+" "+d+" "+i[0:3]+"\n"
                 file_csv.write(line)
                 j += 1
-    file_csv.close()
             
-
 
 def run_3() -> None:
     new_dataset_path = create_dir("new_dataset_rand")

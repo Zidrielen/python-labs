@@ -24,7 +24,6 @@ def create_csv(name_dir: str) -> None:
                 line = abspath+" "+os.path.join(path_, i)+" "+class_+"\n"
                 file_csv.write(line)
                 n += 1
-    file_csv.close()
 
 
 def run_1() -> None:
