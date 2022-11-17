@@ -4,9 +4,9 @@ from csv import reader
 
 
 class Iterator_1:
-    def __init__(self, class_name: str) -> None:
-        path_ = path.join("dataset", class_name)
-        self.names = listdir(path_)
+    def __init__(self, full_path: str , class_name: str) -> None:
+        self.path_ = path.join(full_path, class_name)
+        self.names = listdir(self.path_)
         names_ = self.names.copy()
         for i in names_:
             if not ".jpg" in i:
@@ -20,13 +20,13 @@ class Iterator_1:
     def __next__(self) -> str:
         if self.counter < self.limit:
             self.counter += 1
-            return self.names[self.counter - 1]
+            return path.join(self.path_, self.names[self.counter - 1])
         else:
             raise StopIteration
 
 
 class Iterator_2:
-    def __init__(self, class_name: str, name_dir: str) -> None:
+    def __init__(self, name_dir: str, class_name: str) -> None:
         path_ = path.join("dataset", name_dir)
         self.names = listdir(path_)
         names_ = self.names.copy()
