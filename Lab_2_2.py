@@ -11,21 +11,14 @@ def create_dir(name_dir: str) -> str:
     return path_
 
 
-def copy_dataset(class_name: str, ndp: str) -> None:
-    path_ =  os.path.join('dataset', class_name)
+def copy_dataset(path_fol: str, ndp: str, animal: str) -> None:
+    path_ =  os.path.join(path_fol, animal)
     names = os.listdir(path_)
     for item in names:
         if ".jpg" in item:
             s = os.path.join(path_, item)
-            d = os.path.join(ndp, f'{class_name}_{item}')
+            d = os.path.join(ndp, f'{animal}_{item}')
             copy2(s, d)
-
-
-def run_2() -> None:
-    new_dataset_path = create_dir("new_dataset")
-    copy_dataset("cat", new_dataset_path)
-    copy_dataset("dog", new_dataset_path)
-    create_csv("new_dataset")
 
 
     

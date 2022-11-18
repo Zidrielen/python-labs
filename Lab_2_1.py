@@ -2,30 +2,24 @@ import os
 from pathlib import Path
 
 
-def class_img(name_dir: str, names_list: list, n: int) -> str:
-    if name_dir=="cat" or name_dir=="dog":
-        return name_dir
+def class_img(animal: str, names_list: list, n: int) -> str:
+    if animal=="cat" or animal=="dog":
+        return animal
     else:
         return (names_list[n])[0:3]
 
 
-def create_csv(name_dir: str) -> None:
-    path_ = os.path.join("dataset", name_dir)
+def create_csv(file: str, path_fol: str , animal: str) -> None:
+    path_ = os.path.join(path_fol, animal)
     names_list = os.listdir(path_)
-    name_csv = f"{name_dir}_annotation.csv"
     n = 0
     
-    with open(os.path.join(path_, name_csv), 'w') as file_csv:
-        main_path = os.path.join(str(Path.home()), "python-labs", path_)
+    with open(file, 'a') as file_csv:
         for i in names_list:
             if ".jpg" in i:
-                abspath = str(Path(main_path, i))
-                class_ = class_img(name_dir, names_list, n)
-                line = abspath+" "+os.path.join(path_, i)+" "+class_+"\n"
+                abspath = os.path.join(path_, i)
+                class_ = class_img(animal, names_list, n)
+                rel_path = os.path.join(animal, i)
+                line = abspath+" "+rel_path+" "+class_+"\n"
                 file_csv.write(line)
                 n += 1
-
-
-def run_1() -> None:
-    create_csv("cat")
-    create_csv("dog")
