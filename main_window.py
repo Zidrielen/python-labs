@@ -9,6 +9,7 @@ from PyQt5.QtGui import QPixmap
 from Lab_2_5 import Iterator_1
 from Lab_2_1 import create_csv
 from Lab_2_2 import copy_dataset
+from Lab_2_3 import randNames_create_csv
 
 
 class Window(QWidget):
@@ -91,7 +92,7 @@ class Window(QWidget):
 
         btn_task_1.clicked.connect(self.do_task_1)
         btn_task_2.clicked.connect(self.do_task_2)
-        #btn_task_3.clicked.connect(self.do_task_3)
+        btn_task_3.clicked.connect(self.do_task_3)
         next_cat_btn.clicked.connect(self.next_cat)
         next_dog_btn.clicked.connect(self.next_dog)
 
@@ -116,6 +117,7 @@ class Window(QWidget):
         path = QFileDialog.getSaveFileName(self, "" , "annotation" , "CSV (*.csv)")[0]
         if path == "":
             return
+        
         create_csv(path, self.folderpath, "cat")
         create_csv(path, self.folderpath, "dog")
 
@@ -124,10 +126,21 @@ class Window(QWidget):
         path = QFileDialog.getExistingDirectory(self)
         if path == "":
             return
+        
         copy_dataset(self.folderpath, path, "cat")
         copy_dataset(self.folderpath, path, "dog")
         csv = os.path.join(path, "annotation.csv")
         create_csv(csv, path, "")
+
+    def do_task_3(self) -> None:
+        '''Completion of point 3 from laboratory No. 2'''
+        path = QFileDialog.getExistingDirectory(self)
+        if path == "":
+            return
+        
+        copy_dataset(self.folderpath, path, "cat")
+        copy_dataset(self.folderpath, path, "dog")
+        randNames_create_csv(path)
 
     def exception(self, text: str) -> None:
         '''Warning window'''
