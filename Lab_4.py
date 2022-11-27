@@ -91,7 +91,15 @@ def part_6(my_series: pd.core.series.Series, label: int,
     return tmp_2[tmp_2["width"] <= w]
 
 
-
+def part_7(my_series: pd.core.series.Series, label: int) -> None:
+    
+    my_series["pixels"] = (my_series["height"] *
+                           my_series["width"]  *
+                           my_series["depth"])
+    
+    print("The maximum number of pixels is ", my_series["pixels"].max())
+    print("The minimum number of pixels is", my_series["pixels"].min())
+    print("The average number of pixels is", my_series["pixels"].mean())
 
 
 def main() -> None:
@@ -100,8 +108,9 @@ def main() -> None:
     part_2(my_series)
     part_3(my_series)
     print(part_4(my_series))
-    #series_label = part_5(my_series, 1)
-    #print(series_label)
-    #print(part_6(my_series, 0, 320, 400))
+    series_label = part_5(my_series, 1)
+    print(series_label)
+    print(part_6(my_series, 0, 320, 400))
+    part_7(my_series, 0)
 
 
