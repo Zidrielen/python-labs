@@ -1,7 +1,9 @@
 import os
+from typing import Type
 
 import pandas as pd
 import cv2
+
 
 def append_abs_path(abs_path_to_files: list,
                     list_files: list, dir: list) -> None:
@@ -11,7 +13,7 @@ def append_abs_path(abs_path_to_files: list,
         abs_path_to_files.append(path)
 
 
-def part_1() -> pd.core.frame.DataFrame:
+def part_1() -> pd.core.series.Series:
     '''Creating a DataFrame with column names'''
     project_path = os.path.abspath("")
     cat_dir = os.path.join(project_path, "dataset", "cat")
@@ -31,19 +33,19 @@ def part_1() -> pd.core.frame.DataFrame:
     })
 
 
-def part_2(my_series: pd.core.frame.DataFrame) -> None:
+def part_2(my_series: pd.core.series.Series) -> None:
     '''Create a column with numeric labels'''
     i = 0
 
     for class_ in my_series["class"]:
         if class_ == "cat":
-            my_series.loc[[i], ["num_label"]] = "0"
+            my_series.loc[[i], ["label"]] = 0
         else:
-            my_series.loc[[i], ["num_label"]] = "1"
+            my_series.loc[[i], ["label"]] = 1
         i += 1
 
 
-def part_3(my_series: pd.core.frame.DataFrame) -> None:
+def part_3(my_series: pd.core.series.Series) -> None:
     '''Creating columns with image options'''
     cat_dir = os.path.join( "dataset", "cat")
     dog_dir = os.path.join( "dataset", "dog")
@@ -51,30 +53,55 @@ def part_3(my_series: pd.core.frame.DataFrame) -> None:
     files_cat = os.listdir(cat_dir)
     files_dog = os.listdir(dog_dir)
 
-    characters_img = []
+    i = 0
 
     for file in files_cat:
         image = cv2.imread(os.path.join(cat_dir, file))
-        characters_img.append(image.shape)
+        data = image.shape
+        my_series.loc[[i], "height"] = data[0]
+        my_series.loc[[i], "width"] = data[1]
+        my_series.loc[[i], "depth"] = data[2]
+        i += 1
     
     for file in files_dog:
         image = cv2.imread(os.path.join(dog_dir, file))
-        characters_img.append(image.shape)
-    
-    i = 0
-
-    for data in characters_img:
-        my_series.loc[[i], "width"] = str(data[0])
-        my_series.loc[[i], "height"] = str(data[1])
-        my_series.loc[[i], "depth"] = str(data[2])
+        data = image.shape
+        my_series.loc[[i], "height"] = data[0]
+        my_series.loc[[i], "width"] = data[1]
+        my_series.loc[[i], "depth"] = data[2]
         i += 1
-  
+
+
+def part_4(my_series: pd.core.series.Series) -> None:
+    '''Generates statistical information(Data is balanced)'''
+    print(my_series.describe())
+    
+
+def part_5(my_series: pd.core.series.Series,
+           label: int) -> pd.core.series.Series:
+    '''Returns a DataFrame with the given label'''
+    return my_series[my_series["label"] == label]
+
+
+def part_6(my_series: pd.core.series.Series, label: int,
+           h: int, w: int) -> pd.core.series.Series:
+    '''Returns a DataFrame with the given label and appropriate dimensions'''
+    tmp_1 = my_series[my_series["label"] == label]
+    tmp_2 = tmp_1[tmp_1["height"] <= h]
+    return tmp_2[tmp_2["width"] <= w]
+
+
+
+
 
 def main() -> None:
-
+    '''Start'''
     my_series = part_1()
     part_2(my_series)
     part_3(my_series)
-
+    print(part_4(my_series))
+    #series_label = part_5(my_series, 1)
+    #print(series_label)
+    #print(part_6(my_series, 0, 320, 400))
 
 
