@@ -1,5 +1,4 @@
 import os
-from typing import Type
 from random import randint
 
 import pandas as pd
@@ -68,7 +67,7 @@ def part_3(my_series: pd.core.series.Series) -> None:
 def part_4(my_series: pd.core.series.Series) -> None:
     '''Generates statistical information(Data is balanced)'''
     print(my_series.describe())
-    
+ 
 
 def part_5(my_series: pd.core.series.Series,
            label: int) -> pd.core.series.Series:
@@ -90,14 +89,16 @@ def part_7(my_series: pd.core.series.Series, label: int) -> None:
     my_series["pixels"] = (my_series["height"] *
                            my_series["width"]  *
                            my_series["depth"])
+
+    pixel_my_series = part_5(label)
     
-    print("The maximum number of pixels is ", my_series["pixels"].max())
-    print("The minimum number of pixels is", my_series["pixels"].min())
-    print("The average number of pixels is", my_series["pixels"].mean())
+    print("The maximum number of pixels is ", pixel_my_series["pixels"].max())
+    print("The minimum number of pixels is", pixel_my_series["pixels"].min())
+    print("The average number of pixels is", pixel_my_series["pixels"].mean())
 
 
 def part_8(my_series: pd.core.series.Series, label: int) -> np.ndarray:
-    
+    '''Returns 3 arrays with histograms for each channel'''
     label_series = my_series[my_series["label"] == label]
     rand_num = randint(0, label_series["abspath"].count())
     abspath = my_series.iloc[rand_num, 1]
@@ -114,7 +115,7 @@ def part_8(my_series: pd.core.series.Series, label: int) -> np.ndarray:
 
 def part_9(histr_1: np.ndarray, histr_2: np.ndarray,
            histr_3: np.ndarray) -> np.ndarray:
-    
+    '''Building histograms'''
     col = ('b','g','r')
     plt.plot(histr_1, color=col[0])
     plt.plot(histr_2, color=col[1])
@@ -131,11 +132,10 @@ def main() -> None:
     my_series = part_1()
     part_2(my_series)
     part_3(my_series)
-    print(my_series)
-    #print(part_4(my_series))
-    #series_label = part_5(my_series, 1)
-    #print(series_label)
-    #print(part_6(my_series, 0, 320, 400))
-    #part_7(my_series, 0)
-    #histr_1, histr_2, histr_3 = part_8(my_series, 0)
-    #part_9(histr_1, histr_2, histr_3)
+    print(part_4(my_series))
+    series_label = part_5(my_series, 1)
+    print(series_label)
+    print(part_6(my_series, 0, 320, 400))
+    part_7(my_series, 0)
+    histr_1, histr_2, histr_3 = part_8(my_series, 0)
+    part_9(histr_1, histr_2, histr_3)
