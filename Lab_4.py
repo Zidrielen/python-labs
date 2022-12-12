@@ -1,4 +1,5 @@
 from random import randint
+from typing import List
 
 import pandas as pd
 import cv2
@@ -6,9 +7,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def part_1() -> pd.core.series.Series:
+def part_1() -> pd.DataFrame:
     '''Creating a DataFrame with column names'''
-    df_start = pd.read_csv("task_1.csv", sep = ";", encoding="windows-1251", header=None)
+    df_start = pd.read_csv("task_1.csv", sep = " ", encoding="windows-1251", header=None)
 
     return pd.DataFrame({
         "class": df_start.iloc[:, 2],
@@ -16,7 +17,7 @@ def part_1() -> pd.core.series.Series:
     })
 
 
-def part_2(my_series: pd.core.series.Series) -> None:
+def part_2(my_series: pd.DataFrame) -> None:
     '''Create a column with numeric labels'''
     my_series["label"] = 0
 
@@ -25,7 +26,7 @@ def part_2(my_series: pd.core.series.Series) -> None:
             my_series.iloc[[i], [2]] = 1
 
 
-def part_3(my_series: pd.core.series.Series) -> None:
+def part_3(my_series: pd.DataFrame) -> None:
     '''Creating columns with image options'''
     my_series["height"] = 0
     my_series["width"] = 0
@@ -38,26 +39,24 @@ def part_3(my_series: pd.core.series.Series) -> None:
         my_series.loc[[i], "depth"] = data[2]
 
 
-def part_4(my_series: pd.core.series.Series) -> None:
+def part_4(my_series: pd.DataFrame) -> None:
     '''Generates statistical information(Data is balanced)'''
     print(my_series.describe())
  
 
-def part_5(my_series: pd.core.series.Series,
-           label: int) -> pd.core.series.Series:
+def part_5(my_series: pd.DataFrame, label: int) -> pd.DataFrame:
     '''Returns a DataFrame with the given label'''
     return my_series[my_series["label"] == label]
 
 
-def part_6(my_series: pd.core.series.Series, label: int,
-           h: int, w: int) -> pd.core.series.Series:
+def part_6(my_series: pd.DataFrame, label: int, h: int, w: int) -> pd.DataFrame:
     '''Returns a DataFrame with the given label and appropriate dimensions'''
     tmp_1 = my_series[my_series["label"] == label]
     tmp_2 = tmp_1[tmp_1["height"] <= h]
     return tmp_2[tmp_2["width"] <= w]
 
 
-def part_7(my_series: pd.core.series.Series, label: int) -> None:
+def part_7(my_series: pd.DataFrame, label: int) -> None:
     '''Creates a column with the number of pixels 
        and outputs the minimum, maximum, and median pixels'''
     my_series["pixels"] = (my_series["height"] *
@@ -71,7 +70,7 @@ def part_7(my_series: pd.core.series.Series, label: int) -> None:
     print("The average number of pixels is", pixel_my_series["pixels"].mean())
 
 
-def part_8(my_series: pd.core.series.Series, label: int) -> np.ndarray:
+def part_8(my_series: pd.DataFrame, label: int) -> List[np.ndarray]:
     '''Returns 3 arrays with histograms for each channel'''
     label_series = my_series[my_series["label"] == label]
     rand_num = randint(0, label_series["abspath"].count())
