@@ -1,5 +1,4 @@
 .venv/
 dataset/
 __pycache__/
-new_dataset/
-new_dataset_rand/
+*.csv

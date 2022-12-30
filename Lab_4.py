@@ -31,12 +31,14 @@ def part_3(my_series: pd.DataFrame) -> None:
     my_series["height"] = 0
     my_series["width"] = 0
     my_series["depth"] = 0
+    my_series["pixels"] = 0
 
     for i, path in enumerate(my_series["abspath"]):
-        data = cv2.imread(path[-20:]).shape
-        my_series.loc[[i], "height"] = data[0]
-        my_series.loc[[i], "width"] = data[1]
-        my_series.loc[[i], "depth"] = data[2]
+        data = cv2.imread(path[-20:])
+        my_series.iloc[[i], [3]] = data.shape[0]
+        my_series.iloc[[i], [4]] = data.shape[1]
+        my_series.iloc[[i], [5]] = data.shape[2]
+        my_series.iloc[[i], [6]] = data.size
 
 
 def part_4(my_series: pd.DataFrame) -> None:
@@ -57,12 +59,7 @@ def part_6(my_series: pd.DataFrame, label: int, h: int, w: int) -> pd.DataFrame:
 
 
 def part_7(my_series: pd.DataFrame, label: int) -> None:
-    '''Creates a column with the number of pixels 
-       and outputs the minimum, maximum, and median pixels'''
-    my_series["pixels"] = (my_series["height"] *
-                           my_series["width"]  *
-                           my_series["depth"])
-
+    '''Outputs the minimum, maximum, and median pixels'''
     pixel_my_series = part_5(my_series, label)
     
     print("The maximum number of pixels is ", pixel_my_series["pixels"].max())
@@ -73,7 +70,7 @@ def part_7(my_series: pd.DataFrame, label: int) -> None:
 def part_8(my_series: pd.DataFrame, label: int) -> List[np.ndarray]:
     '''Returns 3 arrays with histograms for each channel'''
     label_series = my_series[my_series["label"] == label]
-    rand_num = randint(0, label_series["abspath"].count())
+    rand_num = randint(0, len(label_series["abspath"]))
     abspath = my_series.iloc[rand_num, 1]
 
     image = cv2.imread(abspath[-20:])

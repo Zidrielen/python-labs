@@ -6,10 +6,9 @@ from PyQt5.QtWidgets import (QApplication, QLabel, QPushButton, QWidget,
                              QFileDialog, QMessageBox, QDesktopWidget, QVBoxLayout)
 from PyQt5.QtGui import QPixmap
 
-from Lab_2_5 import Iterator_1
-from Lab_2_1 import create_csv
-from Lab_2_2 import copy_dataset
-from Lab_2_3 import randNames_create_csv
+from iterators_pic import Iterator_1
+from create_csv import create_csv
+from dataset_copying import copy_dataset, randNames_create_csv
 
 
 class Window(QWidget):
@@ -17,7 +16,7 @@ class Window(QWidget):
     def __init__(self) -> None:
         '''Constructor'''
         super().__init__()
-
+        
         self.start_menu()
 
     def start_menu(self) -> None:
