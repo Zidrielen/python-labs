@@ -2,8 +2,6 @@ from os import mkdir
 from time import sleep
 import requests
 from bs4 import BeautifulSoup as BS
-
-
 class Comment:
     def __init__(self, name, comment, mark):
         if name != "":
